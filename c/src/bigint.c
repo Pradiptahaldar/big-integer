@@ -1,5 +1,6 @@
 #include "../include/bigint.h"
 #include <stdlib.h>
+#include<stdio.h>
 BigInteger *bigint_create(void) {
     BigInteger *num = malloc(sizeof(BigInteger));
 
@@ -129,4 +130,65 @@ int bigint_add(const BigInteger *a, const BigInteger *b, BigInteger *result) {
     result->sign = a->sign;
 
     return 1;
+}
+void bigint_print(const BigInteger *num) {
+    if (num == NULL) {
+        return;
+    }
+
+    if (num->sign < 0) {
+        printf("-");
+    }
+
+    for (size_t i = num->size; i > 0; i--) {
+        printf("%d", num->digits[i - 1]);
+    }
+}
+int bigint_read(BigInteger *num) {
+    if (num == NULL) {
+        return 0;
+    }
+
+    size_t capacity = 16;
+    size_t length = 0;
+
+    char *buffer = malloc(capacity);
+
+    if (buffer == NULL) {
+        return 0;
+    }
+
+    int ch;
+
+    while ((ch = getchar()) != '\n' && ch != EOF) {
+        if (length + 1 >= capacity) {
+            capacity *= 2;
+
+            char *new_buffer = realloc(buffer, capacity);
+
+            if (new_buffer == NULL) {
+                free(buffer);
+                return 0;
+            }
+
+            buffer = new_buffer;
+        }
+
+        buffer[length++] = (char)ch;
+    }
+
+    buffer[length] = '\0';
+
+    int success = bigint_from_string(num, buffer);
+
+    free(buffer);
+
+    return success;
+}
+size_t bigint_digit_count(const BigInteger *num) {
+    if (num == NULL) {
+        return 0;
+    }
+
+    return num->size;
 }
