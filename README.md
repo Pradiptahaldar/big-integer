@@ -307,3 +307,7 @@ The project is intended to be both:
 
 1. A working Big Integer implementation in C.
 2. A reusable library that can be integrated into another C program.
+$env:Path += ";C:\msys64\ucrt64\bin"
+gcc c\main.c c\src\bigint.c -o c\bigint.exe
+.\c\bigint.exe
+123456789012345678901234567890123456789012345678901234567890

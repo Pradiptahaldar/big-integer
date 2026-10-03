@@ -1,7 +1,6 @@
 #ifndef BIGINT_H
 #define BIGINT_H
 #include <stddef.h>
-
 typedef struct {
     int *digits;
     size_t size;
