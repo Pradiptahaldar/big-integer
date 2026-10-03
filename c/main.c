@@ -2,34 +2,44 @@
 #include "include/bigint.h"
 
 int main(void) {
-    BigInteger *num = bigint_create();
+    BigInteger *a = bigint_create();
+    BigInteger *b = bigint_create();
+    BigInteger *result = bigint_create();
 
-    if (num == NULL) {
-        printf("Failed to create BigInteger.\n");
+    if (a == NULL || b == NULL || result == NULL) {
+        printf("Memory allocation failed.\n");
+
+        bigint_free(a);
+        bigint_free(b);
+        bigint_free(result);
+
         return 1;
     }
 
-    char input[1000];
+    bigint_from_string(a, "12345678901234567890123456789012345678901234567890123456789012345678901234567890");
+    bigint_from_string(b, "888888888888888888888888888888888888888888");
 
-    printf("Enter a huge integer: ");
-    scanf("%999s", input);
+    if (!bigint_add(a, b, result)) {
+        printf("Addition failed.\n");
 
-    if (!bigint_from_string(num, input)) {
-        printf("Invalid number.\n");
-        bigint_free(num);
+        bigint_free(a);
+        bigint_free(b);
+        bigint_free(result);
+
         return 1;
     }
 
-    printf("Stored digits: ");
+    printf("Result: ");
 
-    for (size_t i = num->size; i > 0; i--) {
-        printf("%d", num->digits[i - 1]);
+    for (size_t i = result->size; i > 0; i--) {
+        printf("%d", result->digits[i - 1]);
     }
 
     printf("\n");
-    printf("Number of digits: %zu\n", num->size);
 
-    bigint_free(num);
+    bigint_free(a);
+    bigint_free(b);
+    bigint_free(result);
 
     return 0;
 }
