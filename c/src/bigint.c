@@ -1,6 +1,13 @@
 #include "../include/bigint.h"
 #include <stdlib.h>
-#include<stdio.h>
+#include <stdio.h>
+
+struct BigInteger {
+    int *digits;
+    size_t size;
+    size_t capacity;
+    int sign;
+};
 BigInteger *bigint_create(void) {
     BigInteger *num = malloc(sizeof(BigInteger));
     if (num == NULL) {
