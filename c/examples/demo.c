@@ -1,29 +1,30 @@
+#include "../include/pradint.h"
 #include <stdio.h>
-#include "../include/bigint.h"
 
-int main(void) {
-    BigInteger *number = bigint_create();
+int main(void)
+{
+    PradInt *number = pradint_create();
 
     if (number == NULL) {
-        printf("Failed to create BigInteger.\n");
+        printf("Failed to create PradInt.\n");
         return 1;
     }
 
     printf("Enter a huge integer: ");
 
-    if (!bigint_read(number)) {
+    if (!pradint_read(number)) {
         printf("Invalid input.\n");
-        bigint_free(number);
+        pradint_free(number);
         return 1;
     }
 
     printf("You entered: ");
-    bigint_print(number);
+    pradint_print(number);
     printf("\n");
 
-    printf("Digits: %zu\n", bigint_digit_count(number));
+    printf("Digits: %zu\n", pradint_digit_count(number));
 
-    bigint_free(number);
+    pradint_free(number);
 
     return 0;
 }

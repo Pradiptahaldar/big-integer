@@ -1,15 +1,15 @@
-#include "../include/bigint.h"
+#include "../include/pradint.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-struct BigInteger {
+struct PradInt {
     int *digits;
     size_t size;
     size_t capacity;
     int sign;
 };
-BigInteger *bigint_create(void) {
-    BigInteger *num = malloc(sizeof(BigInteger));
+PradInt *pradint_create(void) {
+    PradInt *num = malloc(sizeof(PradInt));
     if (num == NULL) {
         return NULL;
     }
@@ -24,14 +24,14 @@ BigInteger *bigint_create(void) {
     num->digits[0] = 0;
     return num;
 }
-void bigint_free(BigInteger *num) {
+void pradint_free(PradInt *num) {
     if (num == NULL) {
         return;
     }
     free(num->digits);
     free(num);
 }
-int bigint_from_string(BigInteger *num, const char *str) {
+int pradint_from_string(PradInt *num, const char *str) {
     if (num == NULL || str == NULL || *str == '\0') {
         return 0;
     }
@@ -83,7 +83,7 @@ int bigint_from_string(BigInteger *num, const char *str) {
     }
     return 1;
 }
-int bigint_add(const BigInteger *a, const BigInteger *b, BigInteger *result) {
+int pradint_add(const PradInt *a, const PradInt *b, PradInt *result) {
     if (a == NULL || b == NULL || result == NULL) {
         return 0;
     }
@@ -122,7 +122,7 @@ int bigint_add(const BigInteger *a, const BigInteger *b, BigInteger *result) {
     result->sign = a->sign;
     return 1;
 }
-void bigint_print(const BigInteger *num) {
+void pradint_print(const PradInt *num) {
     if (num == NULL) {
         return;
     }
@@ -133,7 +133,7 @@ void bigint_print(const BigInteger *num) {
         printf("%d", num->digits[i - 1]);
     }
 }
-int bigint_read(BigInteger *num) {
+int pradint_read(PradInt *num) {
     if (num == NULL) {
         return 0;
     }
@@ -157,11 +157,11 @@ int bigint_read(BigInteger *num) {
         buffer[length++] = (char)ch;
     }
     buffer[length] = '\0';
-    int success = bigint_from_string(num, buffer);
+    int success = pradint_from_string(num, buffer);
     free(buffer);
     return success;
 }
-size_t bigint_digit_count(const BigInteger *num) {
+size_t pradint_digit_count(const PradInt *num) {
     if (num == NULL) {
         return 0;
     }
