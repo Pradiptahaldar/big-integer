@@ -18,5 +18,10 @@ int pradint_add(
     const PradInt *b,
     PradInt *result
 );
+int pradint_subtract(
+    const PradInt *a,
+    const PradInt *b,
+    PradInt *result 
+);
 
 #endif

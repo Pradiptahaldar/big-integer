@@ -154,7 +154,7 @@ static void subtract_magnitude(
         result->size--;
     }
 }
-/* Add two arbitrary-precision integers. */
+/* Add two integers. */
 int pradint_add(
     const PradInt *a,
     const PradInt *b,
@@ -231,6 +231,94 @@ int pradint_add(
         );
         result->sign = b->sign;
     }
+    return 1;
+}
+int pradint_subtract(
+    const PradInt *a,
+    const PradInt *b,
+    PradInt *result
+)
+{
+    if (a == NULL || b == NULL || result == NULL) {
+        return 0;
+    }
+    size_t max_size = a->size > b->size
+                    ? a->size
+                    : b->size;
+
+    /* Ensure sufficient capacity for the result.*/
+    if (max_size > result->capacity) {
+        size_t new_capacity = result->capacity;
+
+        while (new_capacity < max_size) {
+            new_capacity *= 2;
+        }
+
+        int *new_digits = realloc(
+            result->digits,
+            new_capacity * sizeof(int)
+        );
+
+        if (new_digits == NULL) {
+            return 0;
+        }
+
+        result->digits = new_digits;
+        result->capacity = new_capacity;
+    }
+
+    /*Case 1: Different signs. */
+    if (a->sign != b->sign) {
+        int carry = 0;
+
+        for (size_t i = 0; i < max_size; i++) {
+            int digit_a = i < a->size ? a->digits[i] : 0;
+            int digit_b = i < b->size ? b->digits[i] : 0;
+
+            int sum = digit_a + digit_b + carry;
+
+            result->digits[i] = sum % 10;
+            carry = sum / 10;
+        }
+
+        result->size = max_size;
+
+        if (carry > 0) {
+            result->digits[result->size] = carry;
+            result->size++;
+        }
+
+        result->sign = a->sign;
+
+        return 1;
+    }
+
+    /* Case 2: Same signs.*/
+    int comparison = compare_magnitude(a, b);
+
+    if (comparison == 0) {
+        result->digits[0] = 0;
+        result->size = 1;
+        result->sign = 1;
+
+        return 1;
+    }
+
+    if (comparison > 0) {
+        subtract_magnitude(a, b, result);
+        result->sign = a->sign;
+    } else {
+        subtract_magnitude(b, a, result);
+        result->sign = -a->sign;
+    }
+
+    /*
+     * Normalize zero so it is never negative.
+     */
+    if (result->size == 1 && result->digits[0] == 0) {
+        result->sign = 1;
+    }
+
     return 1;
 }
 

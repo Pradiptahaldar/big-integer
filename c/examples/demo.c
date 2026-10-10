@@ -45,7 +45,7 @@ int main(void)
     printf("\nB: ");
     pradint_print(b);
 
-    if (!pradint_add(a, b, result)) {
+    if (!pradint_subtract(a, b, result)) {
         printf("\nAddition failed.\n");
 
         pradint_free(a);
@@ -55,7 +55,7 @@ int main(void)
         return 1;
     }
 
-    printf("\nA + B: ");
+    printf("\nA - B: ");
     pradint_print(result);
     printf("\n");
 
